@@ -1,16 +1,53 @@
-# React + Vite
+# AG-NES Emulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, web-based NES emulator built with React and Nostalgist.js.
 
-Currently, two official plugins are available:
+[**Play Now**](https://tjw2005.github.io/ag-nes/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- 🕹️ **Full NES Emulation**: Powered by Nostalgist.js and the stable FCEUmm core.
+- 📂 **Drag & Drop Loading**: Simply drag your `.nes` ROM files anywhere on the screen to start playing.
+- 🎮 **Gamepad Support**: Plug and play controller support.
+- 💾 **Save States**: Download your progress as `.state` files and resume later.
+- 🖥️ **Fullscreen Mode**: Immersive gaming experience.
+- 🎨 **Modern UI**: Sleek interface with glassmorphism styling that stays out of your way.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Controls
 
-## Expanding the ESLint configuration
+### Keyboard
+| Key | Action |
+| --- | --- |
+| **Arrow Keys** | D-Pad |
+| **X** | A Button |
+| **Z** | B Button |
+| **Enter** | Start |
+| **Shift** | Select |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Gamepad
+Most USB/Bluetooth controllers are detected automatically.
+- **D-Pad / Left Stick**: Movement
+- **A / B / X / Y**: Action Buttons
+- **Start / Select**: Start / Select
+
+## Local Development
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/tjw2005/ag-nes.git
+   ```
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+3. Run the development server
+   ```bash
+   npm run dev
+   ```
+
+## Credits
+
+This project was built using **Antigravity** by Google DeepMind.
+
+- **Engine**: [Nostalgist.js](https://github.com/retrobox/nostalgist)
+- **Framework**: React + Vite
