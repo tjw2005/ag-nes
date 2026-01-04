@@ -6,6 +6,7 @@ import useGamepad from './hooks/useGamepad'
 
 function App() {
   const [romFile, setRomFile] = useState(null)
+  const [resetKey, setResetKey] = useState(0)
   const emulatorRef = useRef(null)
 
   // Initialize gamepad polling
@@ -41,10 +42,7 @@ function App() {
   }
 
   const handleReset = () => {
-    // Simply reloading the ROM triggers a reset in our Emulator component effect
-    if (romFile) {
-      setRomFile(new File([romFile], romFile.name, { type: romFile.type }))
-    }
+    setResetKey(prev => prev + 1)
   }
 
   return (
@@ -71,6 +69,7 @@ function App() {
           </div>
         ) : (
           <Emulator
+            key={resetKey}
             ref={emulatorRef}
             romFile={romFile}
           />
