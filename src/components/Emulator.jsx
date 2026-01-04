@@ -74,39 +74,39 @@ const Emulator = forwardRef(({ romFile, onStart, onError }, ref) => {
 
     launchEmulator();
 
-    // Handle audio context suspension issues (common in browsers)
-    const resumeAudio = () => {
-      const audioContext = window.AudioContext || window.webkitAudioContext;
-      if (audioContext) {
-        // Did Nostalgist/Emscripten create one? We can often find it if we look for the running one
-        // or we can try to find the one attached to the emulation module if exposed.
-        // However, a generic approach is to try resuming the context if we can find a reference,
-        // OR rely on user interaction. 
 
-        // Since we can't easily access the internal context from the outside without a reference,
-        // we will rely on a trick: trigger a resume on the next interaction.
-        // But for fullscreen specific loss, we can try to re-focus the canvas.
+
+    // Generic resume function
+    const resumeAudio = async () => {
+      // Try Emscripten standard path
+      if (window.Module?.SDL2?.audioContext?.state === 'suspended') {
+        try { await window.Module.SDL2.audioContext.resume(); } catch (e) { }
       }
     };
 
-    // Better approach: Listen for fullscreen change and force focus/resume
     const handleFullscreenChange = async () => {
-      if (document.fullscreenElement && canvasRef.current) {
-        canvasRef.current.focus();
-        // Attempt to resume audio context if accessible via standard Emscripten globals
-        if (window.Module && window.Module.SDL2 && window.Module.SDL2.audioContext) {
-          if (window.Module.SDL2.audioContext.state === 'suspended') {
-            await window.Module.SDL2.audioContext.resume();
-          }
+      setTimeout(async () => {
+        if (document.fullscreenElement && canvasRef.current) {
+          canvasRef.current.focus();
+          await resumeAudio();
+        } else {
+          if (canvasRef.current) canvasRef.current.focus();
         }
-      }
+      }, 100);
     };
+
+    // Add global listeners to catch any user interaction in fullscreen
+    const handleInteraction = () => resumeAudio();
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
+    window.addEventListener('mousedown', handleInteraction);
+    window.addEventListener('keydown', handleInteraction);
 
     return () => {
       active = false;
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      window.removeEventListener('mousedown', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
       if (nostalgistRef.current) {
         nostalgistRef.current.exit();
         nostalgistRef.current = null;
@@ -116,7 +116,11 @@ const Emulator = forwardRef(({ romFile, onStart, onError }, ref) => {
 
   return (
     <div className="emulator-wrapper" style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
+      <canvas
+        ref={canvasRef}
+        tabIndex="0"
+        style={{ width: '100%', height: '100%', outline: 'none' }}
+      />
     </div>
   );
 });
