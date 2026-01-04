@@ -9,7 +9,7 @@ const ControlsInfo = () => {
             padding: '15px',
             fontSize: '0.85em',
             maxWidth: '250px',
-            zIndex: 5
+            zIndex: 90
         }}>
             <h3 style={{ marginBottom: '10px' }}>Controls</h3>
 
